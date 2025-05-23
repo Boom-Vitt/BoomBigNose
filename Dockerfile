@@ -18,7 +18,7 @@ COPY setup-minio.sh .
 RUN chmod +x setup-minio.sh
 
 # Expose ports
-EXPOSE 8080 8880 9000 9001 5432 6379 5433 3000 11434
+EXPOSE 5678 8080 8880 9000 9001 5432 6379 5433 3000 11434
 
 # Set entrypoint
 ENTRYPOINT ["/app/entrypoint.sh"]

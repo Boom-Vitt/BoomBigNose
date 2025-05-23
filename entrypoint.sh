@@ -47,6 +47,14 @@ until $(curl --output /dev/null --silent --head --fail http://localhost:11434/ap
   sleep 5
 done
 
+# Wait for n8n to be ready
+echo "Waiting for n8n to be ready..."
+until $(curl --output /dev/null --silent --head --fail http://localhost:5678); do
+  printf '.'
+  sleep 5
+done
+
 # Keep container running
 echo "All services are up and running!"
+echo "You can access n8n at: http://localhost:5678"
 tail -f /dev/null

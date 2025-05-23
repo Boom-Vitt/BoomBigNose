@@ -1,20 +1,28 @@
-# NCA-Toolkit Railway Template
+# BoomBigNose Railway Template
 
 This template deploys a multi-container application on Railway, consisting of:
 
-1. **NCA-Toolkit** - A No-Code Architects Toolkit
-2. **MinIO** - Object Storage Service
-3. **Kokoro TTS CPU** - Text-to-Speech Service
-4. **PostgreSQL** - Relational Database
-5. **Redis** - In-memory Data Store
-6. **Supabase** - Open Source Firebase Alternative
-7. **Ollama** - Open Source LLM Runner
+1. **n8n** - Workflow Automation Tool
+2. **NCA-Toolkit** - A No-Code Architects Toolkit
+3. **MinIO** - Object Storage Service
+4. **Kokoro TTS CPU** - Text-to-Speech Service
+5. **PostgreSQL** - Relational Database
+6. **Redis** - In-memory Data Store
+7. **Supabase** - Open Source Firebase Alternative
+8. **Ollama** - Open Source LLM Runner
+
+All services are connected to a shared Docker network, allowing them to be easily used together with n8n workflows.
 
 ## One-Click Deployment
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/YOUR_TEMPLATE_ID)
 
 ## Services
+
+### n8n
+- **Image**: n8nio/n8n:latest
+- **Port**: 5678
+- **Description**: Workflow automation tool that allows you to connect various services and automate tasks
 
 ### NCA-Toolkit
 - **Image**: stephengpope/no-code-architects-toolkit:latest
@@ -75,10 +83,18 @@ You can customize the following environment variables:
 - `POSTGRES_PASSWORD`: Supabase PostgreSQL password (default: "postgres")
 - `POSTGRES_DB`: Supabase PostgreSQL database name (default: "postgres")
 
+#### n8n
+- `N8N_BASIC_AUTH_USER`: n8n admin username (default: "admin")
+- `N8N_BASIC_AUTH_PASSWORD`: n8n admin password (default: "password")
+- `DB_POSTGRESDB_DATABASE`: PostgreSQL database for n8n (default: "n8n")
+- `DB_POSTGRESDB_USER`: PostgreSQL username for n8n (default: "postgres")
+- `DB_POSTGRESDB_PASSWORD`: PostgreSQL password for n8n (default: "postgres")
+
 ## Accessing the Services
 
 After deployment, you can access the services at:
 
+- **n8n**: `https://<your-railway-url>:5678`
 - **NCA-Toolkit**: `https://<your-railway-url>:8080`
 - **MinIO API**: `https://<your-railway-url>:9000`
 - **MinIO Console**: `https://<your-railway-url>:9001`
@@ -99,14 +115,15 @@ For production use, please change the default credentials:
 4. Change the PostgreSQL username and password
 5. Change the Supabase PostgreSQL username and password
 6. Update the Supabase JWT keys for production use
+7. Change the n8n admin username and password
 
 ## Local Development
 
 To run this template locally:
 
 ```bash
-git clone https://github.com/your-username/nca-toolkit-template.git
-cd nca-toolkit-template
+git clone https://github.com/your-username/BoomBigNose.git
+cd BoomBigNose
 docker-compose up -d
 ```
 
@@ -119,6 +136,7 @@ This template is provided as-is. Please refer to the individual services for the
 For issues with the template itself, please open an issue on the GitHub repository.
 For issues with the individual services, please refer to their respective documentation:
 
+- [n8n](https://docs.n8n.io/)
 - [NCA-Toolkit](https://github.com/stephengpope/no-code-architects-toolkit)
 - [MinIO](https://min.io/docs/minio/container/index.html)
 - [Kokoro TTS](https://github.com/remsky/kokoro)
