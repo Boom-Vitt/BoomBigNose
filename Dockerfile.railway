@@ -1,5 +1,8 @@
 FROM nginx:alpine
 
+# Install dependencies
+RUN apk add --no-cache bash curl supervisor python3
+
 # Set working directory
 WORKDIR /usr/share/nginx/html
 
@@ -11,8 +14,21 @@ COPY health.json /usr/share/nginx/html/ping
 # Set up nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
+# Create supervisor configuration
+RUN mkdir -p /etc/supervisor/conf.d
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Create entrypoint script
+COPY entrypoint.railway.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
+# Create health check directory
+RUN mkdir -p /app/health
+RUN echo "OK" > /app/health/ping
+RUN echo '<!DOCTYPE html><html><head><title>BoomBigNose Health Check</title></head><body><h1>BoomBigNose Services</h1><p>Status: Running</p></body></html>' > /app/health/index.html
+
 # Expose port
 EXPOSE 8000
 
-# Use nginx's default entrypoint
-CMD ["nginx", "-g", "daemon off;"]
+# Set entrypoint
+ENTRYPOINT ["/app/entrypoint.sh"]
