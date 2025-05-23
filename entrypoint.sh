@@ -1,11 +1,29 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
+# Load environment variables from .env file
+if [ -f .env ]; then
+  echo "Loading environment variables from .env file"
+  export $(grep -v '^#' .env | xargs)
+fi
+
 # Start Docker daemon
+echo "Starting Docker daemon..."
 dockerd &
 sleep 5
 
+# Create necessary directories
+echo "Creating necessary directories..."
+mkdir -p volumes/api volumes/db volumes/functions volumes/logs volumes/storage
+
+# Copy kong.yml.template if it doesn't exist
+if [ ! -f volumes/api/kong.yml.template ]; then
+  echo "Setting up Kong API Gateway configuration..."
+  cp -f volumes/api/kong.yml.template volumes/api/kong.yml.template
+fi
+
 # Start services with docker-compose
+echo "Starting services with docker-compose..."
 docker-compose up -d
 
 # Wait for MinIO to be ready
