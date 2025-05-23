@@ -1,12 +1,50 @@
 [build]
 builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"
+watchPatterns = ["**/*.yml", "**/*.sh", "Dockerfile"]
 
 [deploy]
 numReplicas = 1
-startCommand = "docker-compose up -d"
+startCommand = "bash -c 'cd /app && ./entrypoint.sh'"
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
+sleepApplication = false
 healthcheckPath = "/"
-healthcheckTimeout = 10
+healthcheckTimeout = 30
 healthcheckInterval = 60
+
+[service]
+internal_port = 8000
+auto_deploy_on_push = true
+
+[[ports]]
+port = 8000
+internal_port = 8000
+
+[[ports]]
+port = 5678
+internal_port = 5678
+
+[[ports]]
+port = 8080
+internal_port = 8080
+
+[[ports]]
+port = 8880
+internal_port = 8880
+
+[[ports]]
+port = 9000
+internal_port = 9000
+
+[[ports]]
+port = 9001
+internal_port = 9001
+
+[[ports]]
+port = 3000
+internal_port = 3000
+
+[[ports]]
+port = 11434
+internal_port = 11434

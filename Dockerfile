@@ -6,9 +6,11 @@ RUN apk add --no-cache docker-compose python3 py3-pip curl postgresql-client red
 # Set working directory
 WORKDIR /app
 
-# Copy docker-compose.yml and environment variables
+# Copy docker-compose.yml
 COPY docker-compose.yml .
-COPY .env .
+
+# Create default .env file
+RUN echo "# General Settings\nPOSTGRES_PASSWORD=postgres\nPOSTGRES_USER=postgres\nPOSTGRES_DB=postgres\nPOSTGRES_PORT=5432\nPOSTGRES_HOST=db\n\n# JWT Settings\nJWT_SECRET=super-secret-jwt-token-with-at-least-32-characters-long\nJWT_EXPIRY=3600\nANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0\nSERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU\n\n# MinIO Settings\nMINIO_ROOT_USER=admin\nMINIO_ROOT_PASSWORD=password123\n\n# NCA-Toolkit Settings\nAPI_KEY=thekey\nS3_ENDPOINT_URL=http://minio:9000\nS3_ACCESS_KEY=admin\nS3_SECRET_KEY=password123\nS3_BUCKET_NAME=nca-toolkit\nS3_REGION=None" > .env
 
 # Copy entrypoint script
 COPY entrypoint.sh .

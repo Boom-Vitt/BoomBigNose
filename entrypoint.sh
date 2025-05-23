@@ -2,10 +2,8 @@
 set -e
 
 # Load environment variables from .env file
-if [ -f .env ]; then
-  echo "Loading environment variables from .env file"
-  export $(grep -v '^#' .env | xargs)
-fi
+echo "Loading environment variables from .env file"
+export $(grep -v '^#' .env | xargs -r)
 
 # Start Docker daemon
 echo "Starting Docker daemon..."
