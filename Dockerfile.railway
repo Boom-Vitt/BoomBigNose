@@ -77,9 +77,9 @@ ENV HOME=/home/n8n
 EXPOSE 5678 8000
 
 # Copy startup script
-COPY run.sh /run.sh
+COPY start.sh /start.sh
 
-RUN chmod +x /run.sh
+RUN chmod +x /start.sh
 
 # Set entrypoint
-ENTRYPOINT ["/run.sh"]
+ENTRYPOINT ["/start.sh"]
