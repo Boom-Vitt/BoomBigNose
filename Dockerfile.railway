@@ -23,9 +23,10 @@ RUN mkdir -p /app
 COPY entrypoint.railway.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
 
-# Create health check directory
+# Create health check directory and files
 RUN mkdir -p /app/health
 RUN echo "OK" > /app/health/ping
+RUN echo "OK" > /usr/share/nginx/html/ping
 RUN echo '<!DOCTYPE html><html><head><title>BoomBigNose Health Check</title></head><body><h1>BoomBigNose Services</h1><p>Status: Running</p></body></html>' > /app/health/index.html
 
 # Expose port

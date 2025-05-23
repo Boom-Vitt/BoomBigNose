@@ -3,8 +3,10 @@ set -e
 
 echo "Starting BoomBigNose services on Railway..."
 
+# Create necessary directories
+mkdir -p /app/health /usr/share/nginx/html
+
 # Update health check with current timestamp
-mkdir -p /app/health
 cat > /app/health/index.html << EOF
 <!DOCTYPE html>
 <html>
@@ -23,6 +25,7 @@ EOF
 
 # Create ping endpoint for Railway health checks
 echo "OK" > /app/health/ping
+echo "OK" > /usr/share/nginx/html/ping
 
 # Update health.json with current timestamp
 cat > /usr/share/nginx/html/health.json << EOF
@@ -34,15 +37,37 @@ cat > /usr/share/nginx/html/health.json << EOF
 }
 EOF
 
+# Configure nginx to serve the health check endpoint
+cat > /etc/nginx/conf.d/default.conf << EOF
+server {
+    listen 8000 default_server;
+    server_name _;
+
+    location / {
+        root /usr/share/nginx/html;
+        index index.html;
+    }
+
+    # Health check endpoint for Railway
+    location = /ping {
+        add_header Content-Type text/plain;
+        return 200 'OK';
+    }
+
+    # JSON health check
+    location = /health {
+        root /usr/share/nginx/html;
+        try_files /health.json =200;
+        default_type application/json;
+    }
+}
+EOF
+
 # Start nginx
 echo "Starting nginx..."
 nginx
 
-# Start Python health check server
-echo "Starting health check server..."
-python3 -m http.server 8000 --directory /app/health &
-
 # Keep container running
 echo "All services are up and running!"
-echo "Health check available at: http://localhost:8000"
+echo "Health check available at: http://localhost:8000/ping"
 tail -f /var/log/nginx/access.log
