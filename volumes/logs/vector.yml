@@ -1,0 +1,35 @@
+data_dir: /var/lib/vector
+
+api:
+  enabled: true
+  address: 127.0.0.1:8686
+
+sources:
+  docker_logs:
+    type: docker_logs
+    docker_host: "${DOCKER_HOST:-unix:///var/run/docker.sock}"
+
+transforms:
+  docker_parse:
+    type: remap
+    inputs:
+      - docker_logs
+    source: |-
+      . = parse_json!(.message)
+      .timestamp = to_timestamp!(.time)
+      del(.time)
+
+sinks:
+  logflare:
+    type: http
+    inputs:
+      - docker_parse
+    encoding:
+      codec: json
+    uri: http://analytics:4000/api/logs
+    method: post
+    auth:
+      strategy: bearer
+      token: "${LOGFLARE_API_KEY}"
+    headers:
+      X-API-KEY: "${LOGFLARE_API_KEY}"
