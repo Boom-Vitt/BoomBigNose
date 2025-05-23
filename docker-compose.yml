@@ -475,13 +475,14 @@ services:
     volumes:
       - ./volumes/logs/vector.yml:/etc/vector/vector.yml:ro,z
       - /var/run/docker.sock:/var/run/docker.sock:ro,z
+    environment:
+      DOCKER_HOST: "${DOCKER_HOST:-unix:///var/run/docker.sock}"
+      LOGFLARE_API_KEY: supabase-logflare-apikey
     healthcheck:
       test: ["CMD", "true"]
       timeout: 5s
       interval: 5s
       retries: 3
-    environment:
-      LOGFLARE_API_KEY: supabase-logflare-apikey
     command:
       [
         "--config",

@@ -8,6 +8,7 @@ sources:
   docker_logs:
     type: docker_logs
     docker_host: "${DOCKER_HOST:-unix:///var/run/docker.sock}"
+    include_containers: ["supabase-*", "n8n", "minio", "kokoro-tts", "redis", "ollama"]
 
 transforms:
   docker_parse:
