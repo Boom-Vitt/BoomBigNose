@@ -62,6 +62,8 @@ ENV EXECUTIONS_CLEANUP_MAX_AGE=24
 
 # Security settings
 ENV N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+ENV N8N_ENCRYPTION_KEY=a-random-32-character-string-for-enc
+ENV N8N_USER_FOLDER=/home/node/.n8n
 
 # Expose ports
 EXPOSE 5678 8000
