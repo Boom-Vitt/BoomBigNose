@@ -1,86 +1,20 @@
 FROM node:18-alpine
 
-# Install n8n and dependencies
-RUN apk add --no-cache \
-    nginx \
-    supervisor \
-    curl \
-    postgresql-client \
-    tzdata \
-    git \
-    openssh-client
+# Create app directory
+WORKDIR /app
 
-# Create n8n user and directories
-RUN addgroup -S n8n && adduser -S -G n8n n8n
-RUN mkdir -p /home/n8n/.n8n && \
-    chown -R n8n:n8n /home/n8n
+# Copy package.json and server.js
+COPY package.json .
+COPY server.js .
 
-# Install n8n
-RUN npm install -g n8n
+# Install dependencies
+RUN npm install
 
-# Set up nginx for health check
-RUN mkdir -p /var/www/html
-RUN echo "OK" > /var/www/html/ping
-RUN echo "<html><body><h1>BoomBigNose</h1><p>Railway deployment with n8n</p></body></html>" > /var/www/html/index.html
+# Create health check file
+RUN echo "OK" > /app/ping
 
-# Configure nginx
-COPY nginx.conf /etc/nginx/http.d/default.conf
+# Expose port
+EXPOSE 8000
 
-# Create supervisor configuration
-RUN mkdir -p /etc/supervisor/conf.d
-RUN mkdir -p /var/log/supervisor
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-# Set environment variables
-ENV N8N_HOST=localhost
-ENV N8N_PORT=5678
-ENV N8N_PROTOCOL=http
-ENV N8N_USER_MANAGEMENT_DISABLED=false
-ENV N8N_BASIC_AUTH_ACTIVE=true
-ENV N8N_BASIC_AUTH_USER=admin
-ENV N8N_BASIC_AUTH_PASSWORD=password
-ENV NODE_ENV=production
-ENV WEBHOOK_URL=https://n8n.boombignose.site
-
-# Use SQLite database instead of PostgreSQL
-ENV DB_TYPE=sqlite
-ENV DB_SQLITE_DATABASE=/home/n8n/.n8n/database.sqlite
-
-# Redis configuration
-ENV REDIS_HOST=${REDIS_HOST:-redis}
-
-# Performance tuning
-ENV DB_POSTGRESDB_MAX_CONNECTIONS=20
-ENV DB_POSTGRESDB_MIN_POOL=0
-ENV DB_POSTGRESDB_MAX_POOL=10
-
-# Execution history settings
-ENV EXECUTIONS_DATA_MAX_AGE=24
-ENV EXECUTIONS_DATA_PRUNE=true
-ENV EXECUTIONS_SAVE_DATA_ON_ERROR=all
-ENV EXECUTIONS_SAVE_DATA_ON_SUCCESS=all
-ENV EXECUTIONS_SAVE_DATA_ON_PROGRESS=false
-ENV EXECUTIONS_SAVE_DATA_MANUAL_EXECUTIONS=true
-
-# Automatic cleanup
-ENV EXECUTIONS_CLEANUP=true
-ENV EXECUTIONS_CLEANUP_MAX_AGE=24
-
-# Security settings
-ENV N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=false
-ENV N8N_ENCRYPTION_KEY=a-random-32-character-string-for-enc
-ENV N8N_USER_FOLDER=/home/n8n/.n8n
-ENV HOME=/home/n8n
-ENV DB_TYPE=sqlite
-ENV DB_SQLITE_DATABASE=/home/n8n/.n8n/database.sqlite
-
-# Expose ports
-EXPOSE 5678 8000
-
-# Copy startup script
-COPY start.sh /start.sh
-
-RUN chmod +x /start.sh
-
-# Set entrypoint
-ENTRYPOINT ["/start.sh"]
+# Start the server
+CMD ["node", "server.js"]

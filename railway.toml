@@ -8,8 +8,8 @@ restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 3
 healthcheckEnabled = true
 healthcheckPath = "/ping"
-healthcheckTimeout = 10
-healthcheckInterval = 10
+healthcheckTimeout = 30
+healthcheckInterval = 30
 
 [service]
 internal_port = 8000
@@ -18,7 +18,3 @@ auto_deploy_on_push = true
 [[ports]]
 port = 8000
 internal_port = 8000
-
-[[ports]]
-port = 5678
-internal_port = 5678
