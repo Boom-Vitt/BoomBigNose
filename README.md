@@ -15,7 +15,7 @@ All services are connected to a shared Docker network, allowing them to be easil
 
 ## One-Click Deployment
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/YOUR_TEMPLATE_ID)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/TEMPLATE_ID_FROM_RAILWAY)
 
 ## Services
 
