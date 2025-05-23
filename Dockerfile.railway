@@ -4,10 +4,9 @@ FROM n8nio/n8n:latest
 USER root
 RUN apk update && apk add --no-cache curl nginx supervisor
 
-# Set up nginx for health check
-RUN mkdir -p /var/www/html
-RUN echo "OK" > /var/www/html/ping
-RUN echo "<html><body><h1>BoomBigNose</h1><p>Railway deployment with n8n</p></body></html>" > /var/www/html/index.html
+# Copy startup script
+COPY run.sh /run.sh
+RUN chmod +x /run.sh
 
 # Configure nginx
 COPY nginx.conf /etc/nginx/http.d/default.conf
@@ -71,4 +70,4 @@ EXPOSE 5678 8000
 RUN mkdir -p /etc/supervisor/conf.d
 
 # Set entrypoint
-ENTRYPOINT ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+ENTRYPOINT ["/run.sh"]
