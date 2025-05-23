@@ -1,0 +1,24 @@
+FROM node:18-alpine
+
+# Install dependencies
+RUN apk add --no-cache python3 py3-pip curl postgresql-client redis bash net-tools nginx
+
+# Set working directory
+WORKDIR /app
+
+# Create a simple health check page
+RUN mkdir -p /app/public
+RUN echo '<!DOCTYPE html><html><head><title>BoomBigNose Health Check</title></head><body><h1>BoomBigNose Template</h1><p>Status: Running</p><p id="time"></p><script>document.getElementById("time").innerHTML = "Time: " + new Date().toISOString();</script></body></html>' > /app/public/index.html
+
+# Set up nginx
+COPY nginx.conf /etc/nginx/http.d/default.conf
+
+# Copy startup script
+COPY start.sh /app/
+RUN chmod +x /app/start.sh
+
+# Expose ports
+EXPOSE 8000
+
+# Set entrypoint
+CMD ["/app/start.sh"]

@@ -1,6 +1,6 @@
 # BoomBigNose Railway Template
 
-This template deploys a multi-container application on Railway, consisting of:
+This template provides a comprehensive development environment with multiple services:
 
 1. **n8n** - Workflow Automation Tool
 2. **NCA-Toolkit** - A No-Code Architects Toolkit
@@ -12,6 +12,10 @@ This template deploys a multi-container application on Railway, consisting of:
 8. **Ollama** - Open Source LLM Runner
 
 All services are connected to a shared Docker network, allowing them to be easily used together with n8n workflows.
+
+## Railway Deployment
+
+This template provides a landing page on Railway that links to the GitHub repository where you can find the complete Docker Compose setup for local development.
 
 ## One-Click Deployment
 
