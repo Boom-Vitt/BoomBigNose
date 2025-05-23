@@ -1,36 +1,36 @@
-FROM nginx:alpine
+FROM node:18-alpine
+
+# Create app directory
+WORKDIR /app
+
+# Copy package.json and package-lock.json
+COPY package*.json ./
 
 # Install dependencies
-RUN apk add --no-cache bash curl supervisor python3
+RUN npm install
 
-# Set working directory
-WORKDIR /usr/share/nginx/html
+# Copy application code
+COPY . .
 
-# Copy static files
-COPY public/ /usr/share/nginx/html/
-COPY health.json /usr/share/nginx/html/health.json
-COPY health.json /usr/share/nginx/html/ping
+# Create a simple server file
+RUN echo 'const http = require("http"); \n\
+const server = http.createServer((req, res) => { \n\
+  if (req.url === "/ping") { \n\
+    res.writeHead(200, { "Content-Type": "text/plain" }); \n\
+    res.end("OK"); \n\
+  } else { \n\
+    res.writeHead(200, { "Content-Type": "text/html" }); \n\
+    res.end("<html><body><h1>BoomBigNose</h1><p>Railway deployment successful!</p></body></html>"); \n\
+  } \n\
+}); \n\
+\n\
+const PORT = process.env.PORT || 8000; \n\
+server.listen(PORT, () => { \n\
+  console.log(`Server running on port ${PORT}`); \n\
+}); \n' > server.js
 
-# Set up nginx
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Expose port
+EXPOSE 8000
 
-# Create supervisor configuration
-RUN mkdir -p /etc/supervisor/conf.d
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-# Create app directory and entrypoint script
-RUN mkdir -p /app
-COPY entrypoint.railway.sh /app/entrypoint.sh
-RUN chmod +x /app/entrypoint.sh
-
-# Create health check directory and files
-RUN mkdir -p /app/health
-RUN echo "OK" > /app/health/ping
-RUN echo "OK" > /usr/share/nginx/html/ping
-RUN echo '<!DOCTYPE html><html><head><title>BoomBigNose Health Check</title></head><body><h1>BoomBigNose Services</h1><p>Status: Running</p></body></html>' > /app/health/index.html
-
-# Expose ports
-EXPOSE 80 8000
-
-# Set entrypoint
-ENTRYPOINT ["/app/entrypoint.sh"]
+# Start the server
+CMD ["node", "server.js"]
