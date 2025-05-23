@@ -2,7 +2,7 @@ FROM n8nio/n8n:latest
 
 # Install additional dependencies
 USER root
-RUN apt-get update && apt-get install -y curl nginx supervisor
+RUN apk update && apk add --no-cache curl nginx supervisor
 
 # Set up nginx for health check
 RUN mkdir -p /var/www/html
@@ -10,7 +10,7 @@ RUN echo "OK" > /var/www/html/ping
 RUN echo "<html><body><h1>BoomBigNose</h1><p>Railway deployment with n8n</p></body></html>" > /var/www/html/index.html
 
 # Configure nginx
-COPY nginx.conf /etc/nginx/sites-available/default
+COPY nginx.conf /etc/nginx/http.d/default.conf
 
 # Create supervisor configuration
 RUN mkdir -p /etc/supervisor/conf.d
@@ -67,5 +67,8 @@ ENV N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
 # Expose ports
 EXPOSE 5678 8000
 
+# Create supervisor directory
+RUN mkdir -p /etc/supervisor/conf.d
+
 # Set entrypoint
-ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+ENTRYPOINT ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
