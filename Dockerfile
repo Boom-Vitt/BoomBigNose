@@ -1,7 +1,7 @@
 FROM docker:20.10.16-dind
 
 # Install Docker Compose and other dependencies
-RUN apk add --no-cache docker-compose python3 py3-pip curl postgresql-client redis bash
+RUN apk add --no-cache docker-compose python3 py3-pip curl postgresql-client redis bash net-tools
 
 # Set working directory
 WORKDIR /app

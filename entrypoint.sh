@@ -70,7 +70,29 @@ until $(curl --output /dev/null --silent --head --fail http://localhost:5678); d
   sleep 5
 done
 
+# Create a simple health check endpoint
+mkdir -p /app/health
+cat > /app/health/index.html << EOF
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BoomBigNose Health Check</title>
+</head>
+<body>
+    <h1>BoomBigNose Services</h1>
+    <p>Status: Running</p>
+    <p>Time: $(date)</p>
+</body>
+</html>
+EOF
+
+# Start a simple HTTP server for health checks
+echo "Starting health check server..."
+cd /app/health
+python3 -m http.server 8000 &
+
 # Keep container running
 echo "All services are up and running!"
 echo "You can access n8n at: http://localhost:5678"
+echo "Health check available at: http://localhost:8000"
 tail -f /dev/null

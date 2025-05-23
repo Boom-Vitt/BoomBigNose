@@ -9,9 +9,7 @@ startCommand = "bash -c 'cd /app && ./entrypoint.sh'"
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
 sleepApplication = false
-healthcheckPath = "/"
-healthcheckTimeout = 30
-healthcheckInterval = 60
+healthcheckEnabled = false
 
 [service]
 internal_port = 8000

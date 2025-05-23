@@ -2,12 +2,20 @@ version: '3.8'
 
 name: boombignose
 
+# Health check service for Railway
+x-healthcheck: &default-healthcheck
+  test: ["CMD", "curl", "-f", "http://localhost:8000"]
+  interval: 10s
+  timeout: 5s
+  retries: 3
+
 services:
   n8n:
     container_name: n8n
     image: n8nio/n8n:latest
     ports:
       - "5678:5678"
+    healthcheck: *default-healthcheck
     environment:
       - N8N_HOST=n8n
       - N8N_PORT=5678
