@@ -3,31 +3,17 @@ FROM node:18-alpine
 # Create app directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json
-COPY package*.json ./
+# Copy package.json
+COPY package.json ./
 
 # Install dependencies
 RUN npm install
 
-# Copy application code
-COPY . .
+# Copy server.js file
+COPY server.js .
 
-# Create a simple server file
-RUN echo 'const http = require("http"); \n\
-const server = http.createServer((req, res) => { \n\
-  if (req.url === "/ping") { \n\
-    res.writeHead(200, { "Content-Type": "text/plain" }); \n\
-    res.end("OK"); \n\
-  } else { \n\
-    res.writeHead(200, { "Content-Type": "text/html" }); \n\
-    res.end("<html><body><h1>BoomBigNose</h1><p>Railway deployment successful!</p></body></html>"); \n\
-  } \n\
-}); \n\
-\n\
-const PORT = process.env.PORT || 8000; \n\
-server.listen(PORT, () => { \n\
-  console.log(`Server running on port ${PORT}`); \n\
-}); \n' > server.js
+# Copy ping file
+COPY ping .
 
 # Expose port
 EXPOSE 8000
