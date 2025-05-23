@@ -15,14 +15,17 @@ chown -R n8n:n8n /home/n8n/.n8n
 chown -R n8n:n8n /home/n8n
 
 # Create n8n config file
-cat > /home/n8n/.n8n/config << EOF
+mkdir -p /home/n8n/.n8n/.n8n
+cat > /home/n8n/.n8n/.n8n/config << EOF
 {
   "database": {
     "type": "sqlite",
     "sqlite": {
       "database": "/home/n8n/.n8n/database.sqlite"
     }
-  }
+  },
+  "path": "/home/n8n/.n8n",
+  "userFolder": "/home/n8n/.n8n"
 }
 EOF
 chown -R n8n:n8n /home/n8n/.n8n
