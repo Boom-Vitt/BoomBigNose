@@ -7,18 +7,32 @@ mkdir -p /var/run
 mkdir -p /var/www/html
 
 # Create n8n config directory with proper permissions
-mkdir -p /home/node/.n8n
-chmod -R 755 /home/node/.n8n
-chown -R node:node /home/node/.n8n
-chown -R node:node /home/node
+mkdir -p /home/n8n/.n8n
+chmod -R 755 /home/n8n/.n8n
+chown -R n8n:n8n /home/n8n/.n8n
+chown -R n8n:n8n /home/n8n
 
 # Prevent n8n from trying to use /root/.n8n
 if [ -d "/root/.n8n" ]; then
   rm -rf /root/.n8n
 fi
 mkdir -p /root/.n8n
-ln -sf /home/node/.n8n /root/.n8n
-chown -R node:node /root/.n8n
+ln -sf /home/n8n/.n8n /root/.n8n
+chown -R n8n:n8n /root/.n8n
+
+# Create n8n config file
+mkdir -p /home/n8n/.n8n
+cat > /home/n8n/.n8n/config << EOF
+{
+  "database": {
+    "type": "sqlite",
+    "sqlite": {
+      "database": "/home/n8n/.n8n/database.sqlite"
+    }
+  }
+}
+EOF
+chown -R n8n:n8n /home/n8n/.n8n
 
 # Create health check files
 echo "OK" > /var/www/html/ping

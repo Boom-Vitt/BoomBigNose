@@ -1,18 +1,34 @@
-FROM n8nio/n8n:latest
+FROM node:18-alpine
 
-# Install additional dependencies
-USER root
-RUN apk update && apk add --no-cache curl nginx supervisor
+# Install n8n and dependencies
+RUN apk add --no-cache \
+    nginx \
+    supervisor \
+    curl \
+    postgresql-client \
+    tzdata \
+    git \
+    openssh-client
 
-# Copy startup script
-COPY run.sh /run.sh
-RUN chmod +x /run.sh
+# Create n8n user and directories
+RUN addgroup -S n8n && adduser -S -G n8n n8n
+RUN mkdir -p /home/n8n/.n8n && \
+    chown -R n8n:n8n /home/n8n
+
+# Install n8n
+RUN npm install -g n8n
+
+# Set up nginx for health check
+RUN mkdir -p /var/www/html
+RUN echo "OK" > /var/www/html/ping
+RUN echo "<html><body><h1>BoomBigNose</h1><p>Railway deployment with n8n</p></body></html>" > /var/www/html/index.html
 
 # Configure nginx
 COPY nginx.conf /etc/nginx/http.d/default.conf
 
 # Create supervisor configuration
 RUN mkdir -p /etc/supervisor/conf.d
+RUN mkdir -p /var/log/supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Set environment variables
@@ -26,21 +42,9 @@ ENV N8N_BASIC_AUTH_PASSWORD=password
 ENV NODE_ENV=production
 ENV WEBHOOK_URL=https://n8n.boombignose.site
 
-# Database configuration - using Railway environment variables
-ENV DB_TYPE=postgresdb
-ENV DB_POSTGRESDB_HOST=${PGHOST}
-ENV DB_POSTGRESDB_PORT=${PGPORT}
-ENV DB_POSTGRESDB_DATABASE=${PGDATABASE}
-ENV DB_POSTGRESDB_USER=${PGUSER}
-ENV DB_POSTGRESDB_PASSWORD=${PGPASSWORD}
-ENV DB_POSTGRESDB_SCHEMA=public
-
-# For backward compatibility
-ENV POSTGRES_HOST=${PGHOST}
-ENV POSTGRES_PORT=${PGPORT}
-ENV POSTGRES_DB=${PGDATABASE}
-ENV POSTGRES_USER=${PGUSER}
-ENV POSTGRES_PASSWORD=${PGPASSWORD}
+# Use SQLite database instead of PostgreSQL
+ENV DB_TYPE=sqlite
+ENV DB_SQLITE_DATABASE=/home/n8n/.n8n/database.sqlite
 
 # Redis configuration
 ENV REDIS_HOST=${REDIS_HOST:-redis}
@@ -65,13 +69,30 @@ ENV EXECUTIONS_CLEANUP_MAX_AGE=24
 # Security settings
 ENV N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
 ENV N8N_ENCRYPTION_KEY=a-random-32-character-string-for-enc
-ENV N8N_USER_FOLDER=/home/node/.n8n
+ENV N8N_USER_FOLDER=/home/n8n/.n8n
+ENV HOME=/home/n8n
 
 # Expose ports
 EXPOSE 5678 8000
 
-# Create supervisor directory
-RUN mkdir -p /etc/supervisor/conf.d
+# Create startup script
+RUN echo '#!/bin/sh\n\
+set -e\n\
+\n\
+# Create necessary directories\n\
+mkdir -p /var/log/supervisor\n\
+mkdir -p /var/run\n\
+mkdir -p /var/www/html\n\
+\n\
+# Create health check files\n\
+echo "OK" > /var/www/html/ping\n\
+echo "<html><body><h1>BoomBigNose</h1><p>Railway deployment with n8n</p></body></html>" > /var/www/html/index.html\n\
+\n\
+# Start supervisord\n\
+exec supervisord -c /etc/supervisor/conf.d/supervisord.conf\n\
+' > /run.sh
+
+RUN chmod +x /run.sh
 
 # Set entrypoint
 ENTRYPOINT ["/run.sh"]
