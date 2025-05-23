@@ -18,7 +18,8 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 RUN mkdir -p /etc/supervisor/conf.d
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Create entrypoint script
+# Create app directory and entrypoint script
+RUN mkdir -p /app
 COPY entrypoint.railway.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
 
