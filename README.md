@@ -19,7 +19,7 @@ This template provides a landing page on Railway that links to the GitHub reposi
 
 ## One-Click Deployment
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/TEMPLATE_ID_FROM_RAILWAY)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/project/3c5932b7-b548-4802-b39f-55d7ccfb545d)
 
 ## Services
 
