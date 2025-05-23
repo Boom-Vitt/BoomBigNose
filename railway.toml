@@ -18,3 +18,7 @@ auto_deploy_on_push = true
 [[ports]]
 port = 8000
 internal_port = 8000
+
+[[ports]]
+port = 5678
+internal_port = 5678

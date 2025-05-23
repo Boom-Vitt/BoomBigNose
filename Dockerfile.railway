@@ -1,22 +1,71 @@
-FROM node:18-alpine
+FROM n8nio/n8n:latest
 
-# Create app directory
-WORKDIR /app
+# Install additional dependencies
+USER root
+RUN apt-get update && apt-get install -y curl nginx supervisor
 
-# Copy package.json
-COPY package.json ./
+# Set up nginx for health check
+RUN mkdir -p /var/www/html
+RUN echo "OK" > /var/www/html/ping
+RUN echo "<html><body><h1>BoomBigNose</h1><p>Railway deployment with n8n</p></body></html>" > /var/www/html/index.html
 
-# Install dependencies
-RUN npm install
+# Configure nginx
+COPY nginx.conf /etc/nginx/sites-available/default
 
-# Copy server.js file
-COPY server.js .
+# Create supervisor configuration
+RUN mkdir -p /etc/supervisor/conf.d
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Copy ping file
-COPY ping .
+# Set environment variables
+ENV N8N_HOST=localhost
+ENV N8N_PORT=5678
+ENV N8N_PROTOCOL=http
+ENV N8N_USER_MANAGEMENT_DISABLED=false
+ENV N8N_BASIC_AUTH_ACTIVE=true
+ENV N8N_BASIC_AUTH_USER=admin
+ENV N8N_BASIC_AUTH_PASSWORD=password
+ENV NODE_ENV=production
+ENV WEBHOOK_URL=https://n8n.boombignose.site
 
-# Expose port
-EXPOSE 8000
+# Database configuration
+ENV POSTGRES_USER=${POSTGRES_USER:-postgres}
+ENV POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+ENV POSTGRES_DB=${POSTGRES_DB:-postgres}
+ENV POSTGRES_HOST=${POSTGRES_HOST:-db}
+ENV POSTGRES_PORT=${POSTGRES_PORT:-5432}
+ENV DB_TYPE=postgresdb
+ENV DB_POSTGRESDB_HOST=${POSTGRES_HOST:-db}
+ENV DB_POSTGRESDB_PORT=${POSTGRES_PORT:-5432}
+ENV DB_POSTGRESDB_DATABASE=${POSTGRES_DB:-postgres}
+ENV DB_POSTGRESDB_USER=${POSTGRES_USER:-postgres}
+ENV DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+ENV DB_POSTGRESDB_SCHEMA=public
 
-# Start the server
-CMD ["node", "server.js"]
+# Redis configuration
+ENV REDIS_HOST=${REDIS_HOST:-redis}
+
+# Performance tuning
+ENV DB_POSTGRESDB_MAX_CONNECTIONS=20
+ENV DB_POSTGRESDB_MIN_POOL=0
+ENV DB_POSTGRESDB_MAX_POOL=10
+
+# Execution history settings
+ENV EXECUTIONS_DATA_MAX_AGE=24
+ENV EXECUTIONS_DATA_PRUNE=true
+ENV EXECUTIONS_SAVE_DATA_ON_ERROR=all
+ENV EXECUTIONS_SAVE_DATA_ON_SUCCESS=all
+ENV EXECUTIONS_SAVE_DATA_ON_PROGRESS=false
+ENV EXECUTIONS_SAVE_DATA_MANUAL_EXECUTIONS=true
+
+# Automatic cleanup
+ENV EXECUTIONS_CLEANUP=true
+ENV EXECUTIONS_CLEANUP_MAX_AGE=24
+
+# Security settings
+ENV N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+
+# Expose ports
+EXPOSE 5678 8000
+
+# Set entrypoint
+ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
