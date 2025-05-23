@@ -37,10 +37,37 @@ cat > /usr/share/nginx/html/health.json << EOF
 }
 EOF
 
-# Configure nginx to serve the health check endpoint
+# Configure nginx to serve the health check endpoint on all ports
 cat > /etc/nginx/conf.d/default.conf << EOF
+# Default server for port 80
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    server_name _;
+
+    location / {
+        root /usr/share/nginx/html;
+        index index.html;
+    }
+
+    # Health check endpoint for Railway
+    location = /ping {
+        add_header Content-Type text/plain;
+        return 200 'OK';
+    }
+
+    # JSON health check
+    location = /health {
+        root /usr/share/nginx/html;
+        try_files /health.json =200;
+        default_type application/json;
+    }
+}
+
+# Server for port 8000
 server {
     listen 8000 default_server;
+    listen [::]:8000 default_server;
     server_name _;
 
     location / {

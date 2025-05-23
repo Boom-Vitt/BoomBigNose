@@ -8,12 +8,12 @@ restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 3
 healthcheckEnabled = true
 healthcheckPath = "/ping"
-healthcheckTimeout = 10
-healthcheckInterval = 15
+healthcheckTimeout = 30
+healthcheckInterval = 30
 startCommand = "/app/entrypoint.sh"
 
 [service]
-internal_port = 8000
+internal_port = 80
 auto_deploy_on_push = true
 
 [[ports]]
