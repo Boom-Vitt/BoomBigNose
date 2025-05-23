@@ -14,20 +14,8 @@ chmod -R 755 /home/n8n/.n8n
 chown -R n8n:n8n /home/n8n/.n8n
 chown -R n8n:n8n /home/n8n
 
-# Create n8n config file
-mkdir -p /home/n8n/.n8n/.n8n
-cat > /home/n8n/.n8n/.n8n/config << EOF
-{
-  "database": {
-    "type": "sqlite",
-    "sqlite": {
-      "database": "/home/n8n/.n8n/database.sqlite"
-    }
-  },
-  "path": "/home/n8n/.n8n",
-  "userFolder": "/home/n8n/.n8n"
-}
-EOF
+# Don't create a config file, use environment variables instead
+mkdir -p /home/n8n/.n8n
 chown -R n8n:n8n /home/n8n/.n8n
 
 # Create health check files
@@ -37,5 +25,5 @@ echo "<html><body><h1>BoomBigNose</h1><p>Railway deployment with n8n</p></body><
 # Start nginx in the background
 nginx &
 
-# Start n8n as the n8n user
-su -c "cd /home/n8n && n8n start" n8n
+# Start n8n as the n8n user with explicit environment variables
+su -c "cd /home/n8n && HOME=/home/n8n N8N_USER_FOLDER=/home/n8n/.n8n DB_TYPE=sqlite DB_SQLITE_DATABASE=/home/n8n/.n8n/database.sqlite n8n start" n8n

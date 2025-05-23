@@ -70,8 +70,9 @@ ENV EXECUTIONS_CLEANUP_MAX_AGE=24
 ENV N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=false
 ENV N8N_ENCRYPTION_KEY=a-random-32-character-string-for-enc
 ENV N8N_USER_FOLDER=/home/n8n/.n8n
-ENV N8N_CONFIG_FILES=/home/n8n/.n8n/.n8n/config
 ENV HOME=/home/n8n
+ENV DB_TYPE=sqlite
+ENV DB_SQLITE_DATABASE=/home/n8n/.n8n/database.sqlite
 
 # Expose ports
 EXPOSE 5678 8000
