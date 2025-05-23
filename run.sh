@@ -1,6 +1,8 @@
 #!/bin/sh
 set -e
 
+echo "Starting BoomBigNose services on Railway..."
+
 # Create necessary directories
 mkdir -p /var/log/supervisor
 mkdir -p /var/run
@@ -12,16 +14,7 @@ chmod -R 755 /home/n8n/.n8n
 chown -R n8n:n8n /home/n8n/.n8n
 chown -R n8n:n8n /home/n8n
 
-# Prevent n8n from trying to use /root/.n8n
-if [ -d "/root/.n8n" ]; then
-  rm -rf /root/.n8n
-fi
-mkdir -p /root/.n8n
-ln -sf /home/n8n/.n8n /root/.n8n
-chown -R n8n:n8n /root/.n8n
-
 # Create n8n config file
-mkdir -p /home/n8n/.n8n
 cat > /home/n8n/.n8n/config << EOF
 {
   "database": {
@@ -38,5 +31,5 @@ chown -R n8n:n8n /home/n8n/.n8n
 echo "OK" > /var/www/html/ping
 echo "<html><body><h1>BoomBigNose</h1><p>Railway deployment with n8n</p></body></html>" > /var/www/html/index.html
 
-# Start supervisord
+echo "Starting supervisord..."
 exec supervisord -c /etc/supervisor/conf.d/supervisord.conf

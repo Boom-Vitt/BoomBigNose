@@ -75,22 +75,8 @@ ENV HOME=/home/n8n
 # Expose ports
 EXPOSE 5678 8000
 
-# Create startup script
-RUN echo '#!/bin/sh\n\
-set -e\n\
-\n\
-# Create necessary directories\n\
-mkdir -p /var/log/supervisor\n\
-mkdir -p /var/run\n\
-mkdir -p /var/www/html\n\
-\n\
-# Create health check files\n\
-echo "OK" > /var/www/html/ping\n\
-echo "<html><body><h1>BoomBigNose</h1><p>Railway deployment with n8n</p></body></html>" > /var/www/html/index.html\n\
-\n\
-# Start supervisord\n\
-exec supervisord -c /etc/supervisor/conf.d/supervisord.conf\n\
-' > /run.sh
+# Copy startup script
+COPY run.sh /run.sh
 
 RUN chmod +x /run.sh
 
