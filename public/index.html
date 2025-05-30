@@ -3,149 +3,271 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BoomBigNose Template</title>
+    <title>My Portfolio</title>
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-family: 'Arial', sans-serif; /* Changed font */
+            margin: 0;
+            background-color: #f9fafb; /* Light gray background */
+            color: #1f2937; /* Darker text color for contrast */
             line-height: 1.6;
-            color: #333;
-            max-width: 800px;
-            margin: 0 auto;
+        }
+        header {
+            background-color: #1f2937; /* Dark blue-gray */
+            color: #f9fafb; /* Light text on dark background */
+            padding: 1.5em 0; /* Increased padding */
+            text-align: center;
+            border-bottom: 3px solid #2563eb; /* Accent color border */
+        }
+        .container {
+            width: 90%; /* Slightly wider for better use of space */
+            max-width: 800px; /* Max width for readability */
+            margin: 20px auto; /* Centering with margin */
+            overflow: hidden;
             padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05); /* Softer shadow */
+            border-radius: 8px; /* Rounded corners for container */
         }
         h1 {
-            color: #2563eb;
-            border-bottom: 2px solid #e5e7eb;
-            padding-bottom: 10px;
+            font-size: 2.2em; /* Larger main heading */
+            margin-bottom: 0.5em;
+            color: #f9fafb; /* Ensure header text is light */
         }
         h2 {
-            color: #4b5563;
-            margin-top: 30px;
+            font-size: 1.8em; /* Slightly larger section titles */
+            color: #2563eb; /* Accent color for section titles */
+            border-bottom: 2px solid #e5e7eb; /* Light underline for separation */
+            padding-bottom: 0.3em;
+            margin-top: 1.5em;
+            margin-bottom: 1em;
+        }
+        h3 {
+            font-size: 1.4em;
+            color: #1d4ed8; /* Darker blue for sub-subheadings */
+            margin-top: 1em;
+            margin-bottom: 0.5em;
+        }
+        h4 {
+            font-size: 1.2em;
+            color: #374151; /* Slightly lighter than h3 */
+            margin-top: 0.8em;
+            margin-bottom: 0.4em;
+        }
+        h5 {
+            font-size: 1.05em;
+            color: #4b5563; /* Gray for finer details */
+            margin-top: 0.5em;
+            margin-bottom: 0.3em;
+        }
+        p, li {
+            font-size: 1em; /* Standard text size */
+            color: #374151; /* Readable dark gray */
+            margin-bottom: 0.5em;
+        }
+        ul {
+            list-style-type: disc; /* Standard disc bullets */
+            padding-left: 20px; /* Indentation for lists */
+            margin-bottom: 1em;
+        }
+        ul ul {
+            list-style-type: circle; /* Circle for nested lists */
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
+        }
+        li {
+            margin-bottom: 0.3em; /* Spacing between list items */
         }
         .card {
-            background-color: #f9fafb;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb; /* Light border for cards */
+            border-radius: 6px; /* Rounded corners for cards */
+            padding: 15px;
+            margin-bottom: 20px; /* Space between cards */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03); /* Subtle shadow for cards */
         }
-        .service {
-            margin-bottom: 15px;
+        .card p:last-child, .card ul:last-child {
+            margin-bottom: 0; /* Remove bottom margin from last element in card */
         }
-        .service h3 {
-            margin-bottom: 5px;
-            color: #1f2937;
+        a {
+            color: #2563eb; /* Accent color for links */
+            text-decoration: none; /* No underline by default */
         }
-        .service p {
-            margin-top: 5px;
-            color: #4b5563;
+        a:hover {
+            text-decoration: underline; /* Underline on hover for clarity */
+            color: #1d4ed8; /* Darker blue on hover */
         }
-        .button {
-            display: inline-block;
-            background-color: #2563eb;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: bold;
-            margin-right: 10px;
-            margin-top: 10px;
-        }
-        .button:hover {
-            background-color: #1d4ed8;
+        /* Basic Responsive Adjustments */
+        @media (max-width: 600px) {
+            .container {
+                width: 95%;
+                padding: 15px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            h2 {
+                font-size: 1.5em;
+            }
+            h3 {
+                font-size: 1.2em;
+            }
+            body {
+                font-size: 0.95em; /* Slightly smaller base font for mobile */
+            }
         }
         footer {
-            margin-top: 40px;
             text-align: center;
-            color: #6b7280;
+            padding: 1em 0;
+            margin-top: 30px;
             font-size: 0.9em;
+            color: #6b7280; /* Gray for footer text */
         }
     </style>
 </head>
 <body>
-    <h1>BoomBigNose Template</h1>
+    <header>
+        <h1>Professional Portfolio</h1>
+    </header>
+    <div class="container">
+        <section id="summary">
+            <h2>Professional Summary</h2>
+            <div class="card">
+                <p>Results-driven engineer with 4+ years’ experience designing, building, and shipping AI-driven web and mobile products. Proven track record delivering production-grade solutions for healthcare, education, civic tech, and consumer markets. Adept at end-to-end ownership—from ideation and LLM fine-tuning through cloud deployment and mobile release. Passionate about translating research into scalable products that improve everyday life.</p>
+            </div>
+        </section>
+        <section id="skills">
+            <h2>Core Technical Skills</h2>
+            <div class="card">
+                <h3>Languages & Frameworks</h3>
+                <ul>
+                    <li>TypeScript, JavaScript (ES6+), Python, Dart</li>
+                    <li>React, Next.js, Flutter, FastAPI, Astro</li>
+                </ul>
+                <h3>AI & Data Science</h3>
+                <ul>
+                    <li>PyTorch, TensorFlow</li>
+                    <li>LLM fine-tuning (Typhoon, Llama 3.1)</li>
+                    <li>RAG/CAG pipelines</li>
+                    <li>Prompt Engineering</li>
+                </ul>
+                <h3>Cloud & DevOps</h3>
+                <ul>
+                    <li>AWS, Supabase, Runpod</li>
+                    <li>Docker, CI/CD (GitHub Actions)</li>
+                    <li>OpenRouter, Webhooks, n8n</li>
+                </ul>
+                <h3>Databases</h3>
+                <ul>
+                    <li>PostgreSQL/PostGIS, MongoDB, Redis</li>
+                </ul>
+                <h3>Other</h3>
+                <ul>
+                    <li>Embedded ESP32, Blockchain fundamentals</li>
+                    <li>Git, Jira, MCP</li>
+                </ul>
+            </div>
+        </section>
+        <section id="experience">
+            <h2>Professional Experience</h2>
 
-    <div class="card">
-        <h2>About This Template</h2>
-        <p>
-            BoomBigNose is a comprehensive development environment that combines multiple powerful services
-            for building modern applications. This template includes everything you need to get started with
-            no-code development, workflow automation, object storage, text-to-speech, databases, and AI.
-        </p>
+            <div class="card">
+                <h3>EarEssence Co., Ltd., Bangkok — Founder, AI & Full-Stack Engineer (May 2024 – Present)</h3>
+                <ul>
+                    <li>Architect and deliver end-to-end AI, web, and mobile solutions for health-tech, education, and F&B clients.</li>
+                    <li>Design RAG/CAG architectures and fine-tune Thai-language LLMs, reducing inference costs by 30%.</li>
+                </ul>
 
-        <div class="buttons">
-            <a href="https://github.com/Boom-Vitt/BoomBigNose" class="button">GitHub Repository</a>
-            <a href="https://railway.app/project/3c5932b7-b548-4802-b39f-55d7ccfb545d" class="button">Railway Project</a>
-            <a href="/github" class="button">GitHub (Redirect)</a>
-            <a href="/railway" class="button">Railway (Redirect)</a>
-        </div>
+                <h4>Company Projects</h4>
+                <ul>
+                    <li>
+                        <h5>Map Analytics Platform — Anunda Co., Ltd. & Xlab (2024, Finished)</h5>
+                        <ul>
+                            <li>Built a geospatial analytics app on Google Maps JS API for site selection and traffic analysis.</li>
+                            <li>Stack: Next.js, FastAPI, Google API, Postgresql + Prisma ORM</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h5>EduBuddy (MU Chat) — Mahidol University (2025, Finished)</h5>
+                        <ul>
+                            <li><a href="https://edubuddy.mahidol.ac.th" target="_blank">https://edubuddy.mahidol.ac.th</a> (MU WIFI IP must login)</li>
+                            <li>Campus AI assistant chatbot for educational inquiries.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h5>AI Agents Course Platform — Mahidol University (In Progress)</h5>
+                        <ul>
+                            <li>Developing a platform for professors to create and manage university AI Agents courses.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h5>CRA Landing Website — Princess Chulabhorn Royal Academy (In Progress)</h5>
+                        <ul>
+                            <li>High-performance marketing site built with Next.js App Router; targeting Lighthouse 95+ across all metrics.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h5>Salayte Hashery Mobile App — iOS (On Maintenance) & Android (Finished)</h5>
+                        <ul>
+                            <li>Developed and maintained long-term.</li>
+                            <li>Ordering & loyalty app built with Flutter; 5.0-star average rating.</li>
+                            <li>Integrated Supabase backend and Headless CMS; automated CI/CD via GitHub Actions and TestFlight.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Brain Computer Interface Lab, Mahidol University — Research Engineer (Jun 2022 – Jan 2025)</h3>
+                <ul>
+                    <li>Directed EEG data acquisition & preprocessing research for สสส.</li>
+                    <li>Developed CNN & Transformer models for CT/MRI and EEG classification, improving diagnostic AUC by 15%.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h4>Internships</h4>
+                <ul>
+                    <li>
+                        <h5>Ilosta, Glasgow — Data Science Intern (2023)</h5>
+                        <ul>
+                            <li>Built AI/Machine Learning predictive models that cut workflow bottlenecks by 18%.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h5>Bit.studio, Bangkok — iOS Developer Intern (2022)</h5>
+                        <ul>
+                            <li>Delivered real-time Mobile Application image-processing features using Flutter.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </section>
+        <section id="education">
+            <h2>Education</h2>
+            <div class="card">
+                <h3>University of Edinburgh — MSc Entrepreneurship & Innovation (Onsite) (2025 – Present, Expected 2026)</h3>
+            </div>
+            <div class="card">
+                <h3>Mahidol University — B.Eng Biomedical Engineering, First-Class Honors (2020 – 2024)</h3>
+                <ul>
+                    <li>GPA 3.57 | Senior Project: Cloud-based CTCA plaque & stenosis classification on AWS.</li>
+                    <li>AWS Scholarship recipient (US$ 3,400), TEDFUND (US$ 45,000)</li>
+                </ul>
+            </div>
+        </section>
+        <section id="certifications">
+            <h2>Certifications</h2>
+            <div class="card">
+                <ul>
+                    <li>Google Data Analytics Specialization (Coursera)</li>
+                    <li>TryHackMe: Security Principles, Identity Management, Network Architecture</li>
+                </ul>
+            </div>
+        </section>
     </div>
-
-    <h2>Included Services</h2>
-
-    <div class="service card">
-        <h3>n8n - Workflow Automation Tool</h3>
-        <p>
-            Fair-code licensed workflow automation tool that helps you connect various services and automate tasks.
-        </p>
-    </div>
-
-    <div class="service card">
-        <h3>NCA-Toolkit - No-Code Architects Toolkit</h3>
-        <p>
-            A toolkit for building applications without writing code.
-        </p>
-    </div>
-
-    <div class="service card">
-        <h3>MinIO - Object Storage Service</h3>
-        <p>
-            High-performance, S3-compatible object storage system.
-        </p>
-    </div>
-
-    <div class="service card">
-        <h3>Kokoro TTS - Text-to-Speech Service</h3>
-        <p>
-            Convert text to natural-sounding speech.
-        </p>
-    </div>
-
-    <div class="service card">
-        <h3>Supabase - Open Source Firebase Alternative</h3>
-        <p>
-            An open-source Firebase alternative with PostgreSQL database, authentication, storage, and more.
-        </p>
-    </div>
-
-    <div class="service card">
-        <h3>Redis - In-memory Data Store</h3>
-        <p>
-            In-memory data structure store, used as a database, cache, and message broker.
-        </p>
-    </div>
-
-    <div class="service card">
-        <h3>Ollama - Open Source LLM Runner</h3>
-        <p>
-            Run open-source large language models locally.
-        </p>
-    </div>
-
-    <h2>Getting Started</h2>
-    <div class="card">
-        <p>
-            To use this template locally, clone the GitHub repository and follow the instructions in the README.md file.
-        </p>
-        <a href="https://github.com/Boom-Vitt/BoomBigNose" class="button">View on GitHub</a>
-    </div>
-
     <footer>
-        <p>Created by Boom-Vitt | <span id="current-time"></span></p>
+        <p>&copy; 2024 Professional Portfolio. All rights reserved.</p>
     </footer>
-
-    <script>
-        document.getElementById('current-time').textContent = new Date().toLocaleString();
-    </script>
 </body>
 </html>
